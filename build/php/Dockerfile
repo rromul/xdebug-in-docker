@@ -14,3 +14,5 @@ RUN mv /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 RUN docker-php-ext-install zip
 
 RUN pecl install xdebug && docker-php-ext-enable xdebug
+
+WORKDIR /app
