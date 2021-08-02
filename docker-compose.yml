@@ -1,0 +1,27 @@
+version: "3.7"
+
+x-extra-hosts: &hosts
+    extra_hosts:
+        - "host.docker.internal:host-gateway"
+
+services:
+    php-fpm:
+        build:
+            dockerfile: Dockerfile
+            context: ./build/php
+        container_name: test_xdebug
+        expose:
+            - 9000
+        volumes:
+            - ./src:/app:cached
+            - ./build/php/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
+        <<: *hosts
+    nginx:
+        image: nginx:alpine
+        container_name: test_nginx
+        ports: 
+            - 80:80
+        volumes:
+            - ./src:/app:cached
+            - ./build/nginx/site.conf:/etc/nginx/nginx.conf:ro
+        <<: *hosts
